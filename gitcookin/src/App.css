@@ -1,10 +1,94 @@
-.App {
-  text-align: center;
+/* Reset some default browser styles */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  background-color: #181c20;
+  color: #e6f4f1;
+  min-height: 100vh;
+  line-height: 1.7;
+  font-size: 18px;
+  letter-spacing: 0.02em;
 }
 
+/* App container */
+.App {
+  text-align: center;
+  min-height: 100vh;
+  background-color: #181c20;
+}
+
+/* Header styling */
+.App-header {
+  background-color: #232a34;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  color: #38bdf8; /* sky blue */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.24);
+  margin-bottom: 32px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: #6ee7b7; /* soft green */
+  font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 700;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+
+h1 {
+  font-size: 2.4rem;
+  margin-top: 0.5em;
+}
+
+h2 {
+  font-size: 2rem;
+  color: #38bdf8; /* sky blue */
+}
+
+h3 {
+  font-size: 1.5rem;
+  color: #7dd3fc; /* lighter blue */
+}
+
+p, li, label, input, textarea {
+  color: #b3c2d1; /* light blue-gray */
+  font-size: 1.08rem;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+}
+
+p {
+  margin-bottom: 1.2em;
+}
+
+ul, ol {
+  margin-left: 2em;
+  margin-bottom: 1.2em;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #2d3748;
+  margin: 2em 0;
+}
+
+/* Logo animation */
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+  filter: brightness(1.1) invert(0.9);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -13,22 +97,80 @@
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Universal button styles */
+button {
+  background-color: #38bdf8; /* sky blue */
+  color: #181c20;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 28px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  margin: 10px 0;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+
+button:hover, button:focus {
+  background-color: #6ee7b7; /* soft green */
+  color: #181c20;
+  outline: none;
+}
+
+/* Card styles for recipes */
+.recipe-card {
+  background: #232a34;
+  border-radius: 14px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.28);
+  padding: 28px;
+  margin: 20px auto;
+  max-width: 420px;
+  text-align: left;
+  transition: box-shadow 0.2s, background 0.2s;
+  border: 1px solid #2d3748;
+}
+
+.recipe-card:hover {
+  box-shadow: 0 4px 28px rgba(94,234,212,0.10);
+  background: #28313b;
+}
+
+.recipe-card h2 {
+  color: #38bdf8;
+  margin-top: 0;
+  font-size: 1.5rem;
+  letter-spacing: 0.5px;
+}
+
+.recipe-card p {
+  color: #e0f2fe;
+  font-size: 1.05rem;
+}
+
+/* Utility classes */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  margin-bottom: 1rem;
+  padding: 28px;
+  background: #1a222c;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
+
+a {
+  color: #38bdf8;
+  text-decoration: none;
+  transition: color 0.2s;
+  font-weight: 500;
+}
+
+a:hover {
+  color: #6ee7b7;
 }
