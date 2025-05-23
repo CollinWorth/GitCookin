@@ -3,7 +3,7 @@ import './css/addRecipe.css';
 
 function AddRecipe({ onClose, user }) {
   const [form, setForm] = useState({
-    title: '',
+    recipe_name: '',
     instructions: '',
     prep_time: '',
     cook_time: '',
@@ -11,7 +11,7 @@ function AddRecipe({ onClose, user }) {
     cuisine: '',
     tags: '',
     image_url: '',
-    user_id: user?.id || user?._id || '', // <-- set from user prop
+    user_id: user?.id || user?._id || '',
   });
 
   const [ingredients, setIngredients] = useState([
@@ -19,7 +19,6 @@ function AddRecipe({ onClose, user }) {
   ]);
 
   useEffect(() => {
-    // Set user_id from user prop when component mounts or user changes
     if (user && (user.id || user._id)) {
       setForm(f => ({ ...f, user_id: user.id || user._id }));
     }
@@ -46,15 +45,17 @@ function AddRecipe({ onClose, user }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    console.log('submitting recipe', form, ingredients);
+
     const endpoint = 'http://localhost:8000/recipes';
 
     const recipe = {
-      title: form.title,
+      recipe_name: form.recipe_name,
       ingredients: ingredients.map(ing => ({
         name: ing.name,
         quantity: ing.quantity,
         unit: ing.unit,
-        recipe_id: '', // backend can set this
       })),
       instructions: form.instructions,
       prep_time: form.prep_time ? Number(form.prep_time) : undefined,
@@ -63,7 +64,7 @@ function AddRecipe({ onClose, user }) {
       cuisine: form.cuisine,
       tags: form.tags,
       image_url: form.image_url,
-      user_id: user?.id || user?._id || '', // <-- always use the prop
+      user_id: form.user_id,
     };
 
     try {
@@ -89,7 +90,7 @@ function AddRecipe({ onClose, user }) {
         <form className="add-recipe-form" onSubmit={handleSubmit}>
           <label>
             Title:
-            <input type="text" name="title" value={form.title} onChange={handleChange} required />
+            <input type="text" name="recipe_name" value={form.recipe_name} onChange={handleChange} required />
           </label>
           <label>
             Ingredients:
@@ -153,10 +154,6 @@ function AddRecipe({ onClose, user }) {
           <label>
             Image URL:
             <input type="text" name="image_url" value={form.image_url} onChange={handleChange} />
-          </label>
-          <label>
-            User ID:
-            <input type="text" name="user_id" value={form.user_id} onChange={handleChange} required />
           </label>
           <button type="submit">Add Recipe</button>
         </form>

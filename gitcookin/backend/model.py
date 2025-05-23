@@ -4,9 +4,8 @@ from typing import Optional, List
 
 class Ingredient(BaseModel):
     name: str
-    quantity: Optional[str]
-    unit: Optional[str]
-    recipe_id: str
+    quantity: str
+    unit: str 
 
 
 class Recipe(BaseModel):

@@ -27,7 +27,15 @@ async def get_recipes():
 @router.post("/")
 async def create_recipe(recipe: Recipe):
     try:
-        await recipes_collection.insert_one(recipe.dict())
+        # Convert user_id to ObjectId
+        recipe_dict = recipe.dict()
+        try:
+            recipe_dict["user_id"] = ObjectId(recipe_dict["user_id"])
+        except Exception:
+            raise HTTPException(status_code=400, detail="Invalid user_id format")
+
+        # Insert the recipe into the database
+        await recipes_collection.insert_one(recipe_dict)
         return {"message": "Recipe created successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error creating recipe: {str(e)}")
