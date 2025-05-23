@@ -1,11 +1,21 @@
 from fastapi import FastAPI
 from database import client, db
 from routers import users, recipes
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
 app.include_router(recipes.router, prefix="/recipes", tags=["recipes"])
 app.include_router(users.router, prefix="/users", tags=["users"])
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # frontend origin
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.on_event("startup")
 async def startup_db_client():

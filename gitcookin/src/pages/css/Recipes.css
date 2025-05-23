@@ -27,10 +27,14 @@
   border: 1px solid #2d3748;
   border-radius: 14px;
   padding: 1.5rem;
-  width: 300px;
+  width: 320px;
   text-align: left;
   box-shadow: 0 2px 16px rgba(0,0,0,0.28);
   transition: box-shadow 0.2s, background 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
 }
 
 .recipe-card:hover {
@@ -45,9 +49,38 @@
   letter-spacing: 0.5px;
 }
 
-.recipe-card p {
-  font-size: 1rem;
-  color: #e0f2fe; /* very light blue */
+.recipe-badge {
+  display: inline-block;
+  background: #1f252b;           /* soft blue background */
+  color: #2563eb;                /* deep blue text */
+  border: none;                  /* remove border */
+  border-radius: 999px;          /* pill shape */
+  padding: 0.18em 0.9em;
+  font-size: 0.97rem;
+  font-weight: 500;
+  margin-right: 0.5em;
+  margin-bottom: 0.2em;
+  letter-spacing: 0.03em;
+  box-shadow: 0 1px 4px rgba(56,189,248,0.07);
+  vertical-align: middle;
+  transition: background 0.2s, color 0.2s;
+}
+
+.recipe-details-row {
+  display: flex;
+  gap: 1.2em;
+  margin: 0.7em 0 0.5em 0;
+  font-size: 1.05rem;
+  color: #b3c2d1;
+}
+
+.recipe-card-image {
+  width: 100%;
+  max-height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-top: 1em;
+  box-shadow: 0 2px 8px rgba(56,189,248,0.10);
 }
 
 .recipePage-container {
