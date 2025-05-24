@@ -2,16 +2,20 @@ import React, { useState, useEffect } from 'react';
 import '../App.css';
 import './css/Recipes.css';
 import AddRecipe from '../components/addRecipe.js';
+import SearchBar from '../components/SearchBar.js';
 
 function Recipes({ user }) {
   const [showAddRecipe, setShowAddRecipe] = useState(false);
   const [recipes, setRecipes] = useState([]);
+  const [filteredRecipes, setFilteredRecipes] = useState([]); // Initialize filteredRecipes
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const fetchRecipes = async () => {
       if (!user || !(user.id || user._id)) {
         setRecipes([]);
+        setFilteredRecipes([]); // Clear filteredRecipes if no user
         setLoading(false);
         return;
       }
@@ -22,37 +26,49 @@ function Recipes({ user }) {
         if (response.ok) {
           const data = await response.json();
           setRecipes(data);
+          setFilteredRecipes(data); // Initialize filteredRecipes with all recipes
         } else {
           setRecipes([]);
+          setFilteredRecipes([]);
         }
       } catch (err) {
         setRecipes([]);
+        setFilteredRecipes([]);
       }
       setLoading(false);
     };
     fetchRecipes();
   }, [showAddRecipe, user]);
 
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    const filtered = recipes.filter((recipe) =>
+      recipe.recipe_name.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredRecipes(filtered); // Update filteredRecipes based on the search query
+  };
+
   return (
     <>
       <div className="add-recipe-button" style={{ display: 'flex', justifyContent: 'flex-end', maxWidth: 900, margin: '32px auto 0 auto' }}>
         <button onClick={() => setShowAddRecipe(true)}>Add Recipe</button>
       </div>
+      <SearchBar onSearch={handleSearch} />
       {showAddRecipe && (
         <AddRecipe onClose={() => setShowAddRecipe(false)} user={user} />
       )}
       <div className="container">
-        <div className='recipePage-container'>
+        <div className="recipePage-container">
           <div className="recipes">
             <h1>Your Recipes</h1>
             <p>These are recipes you have added.</p>
             <div className="recipe-list">
               {loading ? (
                 <div>Loading recipes...</div>
-              ) : recipes.length === 0 ? (
+              ) : filteredRecipes.length === 0 ? ( // Use filteredRecipes for rendering
                 <div>No recipes found.</div>
               ) : (
-                recipes.map((recipe, idx) => (
+                filteredRecipes.map((recipe, idx) => (
                   <div className="recipe-card" key={recipe._id || recipe.id || idx}>
                     <h2>{recipe.recipe_name}</h2>
                     <div style={{ margin: "10px 0" }}>
@@ -83,7 +99,7 @@ function Recipes({ user }) {
                     {recipe.image_url && (
                       <img
                         src={recipe.image_url}
-                        alt={recipe.title}
+                        alt={recipe.recipe_name}
                         className="recipe-card-image"
                       />
                     )}
