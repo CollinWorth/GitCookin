@@ -3,6 +3,7 @@ import '../App.css';
 import './css/Recipes.css';
 import AddRecipe from '../components/addRecipe.js';
 import SearchBar from '../components/SearchBar.js';
+import { useNavigate } from 'react-router-dom';
 
 function Recipes({ user }) {
   const [showAddRecipe, setShowAddRecipe] = useState(false);
@@ -10,6 +11,7 @@ function Recipes({ user }) {
   const [filteredRecipes, setFilteredRecipes] = useState([]); // Initialize filteredRecipes
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -48,6 +50,10 @@ function Recipes({ user }) {
     setFilteredRecipes(filtered); // Update filteredRecipes based on the search query
   };
 
+  const handleRecipeClick = (id) => {
+    navigate(`/recipes/${id}`); // Navigate to the recipe details page
+  };
+
   return (
     <>
       <div className="add-recipe-button" style={{ display: 'flex', justifyContent: 'flex-end', maxWidth: 900, margin: '32px auto 0 auto' }}>
@@ -69,7 +75,12 @@ function Recipes({ user }) {
                 <div>No recipes found.</div>
               ) : (
                 filteredRecipes.map((recipe, idx) => (
-                  <div className="recipe-card" key={recipe._id || recipe.id || idx}>
+                  <div
+                    className="recipe-card"
+                    key={recipe._id || recipe.id || idx}
+                    onClick={() => handleRecipeClick(recipe._id || recipe.id)}
+                    style={{ cursor: 'pointer' }} // Add pointer cursor for better UX
+                  >
                     <h2>{recipe.recipe_name}</h2>
                     <div style={{ margin: "10px 0" }}>
                       {recipe.cuisine && (

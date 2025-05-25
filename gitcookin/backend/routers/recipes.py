@@ -53,3 +53,24 @@ async def get_recipes_by_user(user_id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching recipes: {str(e)}")
 
+@router.get("/{recipe_id}")
+async def get_recipe(recipe_id: str):
+    try:
+        recipe = await recipes_collection.find_one({"_id": ObjectId(recipe_id)})
+        if not recipe:
+            raise HTTPException(status_code=404, detail="Recipe not found")
+        return recipe_to_json(recipe)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching recipe: {str(e)}")
+
+@router.delete("/{recipe_id}")
+async def delete_recipe(recipe_id: str):
+    try:
+        resulte = await recipes_collection.find_one_and_delete({"_id": ObjectId(recipe_id)})
+        if not resulte:
+            raise HTTPException(status_code=404, detail="Recipe not found")
+        return {"message": "Recipe deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error deleting recipe: {str(e)}")
+
+
