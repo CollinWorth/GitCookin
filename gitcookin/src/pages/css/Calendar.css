@@ -3,3 +3,71 @@
   padding: 2rem;
 }
 
+.calendar-container {
+  position: relative;
+  margin: 1rem auto;
+  max-width: 400px;
+  background-color: #1f2937; /* Dark background */
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.react-calendar {
+  border: none;
+  background-color: #374151; /* Dark calendar background */
+  border-radius: 8px;
+  color: #f3f4f6; /* Light text color */
+}
+
+.react-calendar__tile {
+  background-color: #1f2937; /* Tile background */
+  color: #f3f4f6; /* Tile text color */
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.react-calendar__tile:enabled:hover {
+  background-color: #6ee7b7; /* Highlight on hover */
+  color: #1f2937; /* Dark text for contrast */
+}
+
+.react-calendar__tile--active {
+  background-color: #4ade80; /* Active tile background */
+  color: #1f2937; /* Dark text for contrast */
+}
+
+.selected-week {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  color: #6ee7b7; /* Highlighted text color */
+}
+
+.week-selector {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.week-selector label {
+  font-size: 1rem;
+  color: #f3f4f6; /* Light text color */
+}
+
+.week-selector select {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #6ee7b7; /* Green border */
+  border-radius: 4px;
+  background-color: #1f2937; /* Dark dropdown background */
+  color: #f3f4f6; /* Light text color */
+  cursor: pointer;
+}
+
+.week-selector select:hover {
+  background-color: #374151; /* Slightly lighter background on hover */
+}
+

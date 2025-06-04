@@ -1,0 +1,142 @@
+.day-planner {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background-color: #1f2937; /* Dark background */
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Slightly darker shadow */
+  font-family: 'Arial', sans-serif;
+  color: #f3f4f6; /* Light text color */
+}
+
+.day-selector {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.day-button {
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #f3f4f6; /* Light text color */
+  background-color: #374151; /* Dark button background */
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.day-button.active {
+  background-color: #6ee7b7; /* Highlighted button background */
+  color: #1f2937; /* Dark text for contrast */
+}
+
+.day-button:hover {
+  background-color: #4ade80; /* Slightly darker green on hover */
+  color: #1f2937; /* Dark text for contrast */
+}
+
+.day-recipes {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: #374151; /* Dark container background */
+  border-radius: 8px;
+  border: 1px solid #6ee7b7; /* Green border */
+  min-height: 150px;
+}
+
+.day-recipes h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #6ee7b7; /* Green text for headings */
+}
+
+.day-recipes ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.day-recipes ul li {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: #f3f4f6; /* Light text color */
+}
+
+.recipe-search {
+  margin-bottom: 1.5rem;
+}
+
+.recipe-search input {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1rem;
+  border: 1px solid #6ee7b7; /* Green border */
+  border-radius: 8px;
+  background-color: #1f2937; /* Dark input background */
+  color: #f3f4f6; /* Light text color */
+}
+
+.recipe-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.recipe-card {
+  padding: 1rem;
+  background-color: #374151; /* Dark card background */
+  border: 1px solid #6ee7b7; /* Green border */
+  border-radius: 8px;
+  cursor: grab;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); /* Slightly darker shadow */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.recipe-card:hover {
+  background-color: #6ee7b7; /* Green background on hover */
+  border-color: #4ade80; /* Slightly darker green border on hover */
+  color: #1f2937; /* Dark text for contrast */
+}
+
+.recipe-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.2rem;
+  color: #6ee7b7; /* Green text for headings */
+}
+
+.recipe-card p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #f3f4f6; 
+}
+
+.recipe-item {
+  padding: 0.8rem;
+  border: 1px solid #ffffff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Align the button to the right */
+  margin-bottom: 0.5rem;
+}
+
+.recipe-item span {
+  font-size: 1.1rem;
+  color: #f3f4f6; /* Light text color */
+}
+
+.remove-recipe {
+  padding: 0.2rem 0.5rem; /* Make the button smaller */
+  font-size: 0.9rem; /* Smaller font size */
+  background-color: #f87171; /* Light red background */
+  color: #f3f4f6; /* Light text color */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.remove-recipe:hover {
+  background-color: #ef4444; /* Darker red on hover */
+}
