@@ -6,6 +6,7 @@ client = motor.motor_asyncio.AsyncIOMotorClient(uri)
 db = client.cookindb
 recipes_collection = db.recipes
 users_collection = db.users
+mealPlans_collection = db.mealPlans
 
 
 

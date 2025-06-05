@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from database import recipes_collection
+from database import recipes_collection, mealPlans_collection
 from model import Recipe
 from bson import ObjectId
 
@@ -63,7 +63,7 @@ async def get_recipe(recipe_id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching recipe: {str(e)}")
 
-@router.delete("/{recipe_id}")
+@router.delete("/deleteRecipe/{recipe_id}")
 async def delete_recipe(recipe_id: str):
     try:
         resulte = await recipes_collection.find_one_and_delete({"_id": ObjectId(recipe_id)})
@@ -73,4 +73,33 @@ async def delete_recipe(recipe_id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error deleting recipe: {str(e)}")
 
+@router.post("/{recipe_id}/{selected_day}/{user_id}")
+async def select_recipe(recipe_id: str, selected_day: str, user_id: str):
+    try:
+        recipe_obj_id = ObjectId(recipe_id)
+        user_obj_id = ObjectId(user_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid recipe_id or user_id format")
 
+    try:
+        # Update the recipe with the selected day and user
+        result = await mealPlans_collection.insert_one(
+            {
+                "user_id": user_obj_id,
+                "recipe_id": recipe_obj_id,
+                "date": selected_day
+            }
+        )
+        return {"message": "Recipe selected successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error selecting recipe: {str(e)}")
+
+@router.delete("/deleteMealPlan/{meal_plan_id}")
+async def delete_meal_plan(meal_plan_id: str):
+    try:
+        result = await mealPlans_collection.find_one_and_delete({"_id": ObjectId(meal_plan_id)})
+        if not result:
+            raise HTTPException(status_code=404, detail="Meal plan not found")
+        return {"message": "Meal plan deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error deleting meal plan: {str(e)}")
