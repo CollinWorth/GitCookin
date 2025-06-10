@@ -103,3 +103,64 @@ async def delete_meal_plan(meal_plan_id: str):
         return {"message": "Meal plan deleted successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error deleting meal plan: {str(e)}")
+
+@router.get("/mealPlans/{selected_date}/{user_id}")
+async def get_meal_plans(selected_date: str, user_id: str):
+    try:
+        # Fetch meal plans for the user and day
+        meal_plans = await mealPlans_collection.find({
+            "user_id": ObjectId(user_id),
+            "date": selected_date
+        }).to_list(1000)
+
+        if not meal_plans:
+            raise HTTPException(status_code=404, detail="No meal plans found for the given day and user")
+
+        # Convert ObjectId fields to strings
+        def convert_objectid_to_string(document):
+            document["_id"] = str(document["_id"])
+            document["user_id"] = str(document["user_id"])
+            if "recipe_id" in document:
+                document["recipe_id"] = str(document["recipe_id"])
+            return document
+
+        return [convert_objectid_to_string(mp) for mp in meal_plans]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching meal plans: {str(e)}")
+
+@router.post("/mealPlans/Create/{date}/{userId}/{recipeId}")
+async def create_meal_plan(date: str, userId: str, recipeId: str):
+    try:
+
+        # Convert userId and recipeId to ObjectId
+        try:
+            user_obj_id = ObjectId(userId)
+            recipe_obj_id = ObjectId(recipeId)
+        except Exception:
+            raise HTTPException(status_code=400, detail="Invalid userId or recipeId format")
+        # Insert the meal plan into the database
+        await mealPlans_collection.insert_one({
+            "user_id": user_obj_id,
+            "recipe_id": recipe_obj_id,
+            "date": date
+        })
+        return {"message": "Meal plan created successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to create meal plan: {str(e)}")
+
+@router.delete("/mealPlans/Delete/{mealPlanId}")
+async def delete_meal_plan(mealPlanId: str):
+    try:
+        # Convert mealPlanId to ObjectId
+        try:
+            meal_plan_obj_id = ObjectId(mealPlanId)
+        except Exception:
+            raise HTTPException(status_code=400, detail="Invalid mealPlanId format")
+
+        # Delete the meal plan from the database
+        result = await mealPlans_collection.find_one_and_delete({"_id": meal_plan_obj_id})
+        if not result:
+            raise HTTPException(status_code=404, detail="Meal plan not found")
+        return {"message": "Meal plan deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to delete meal plan: {str(e)}")

@@ -19,7 +19,7 @@ function Recipes({ user }) {
         setRecipes([]);
         setFilteredRecipes([]); // Clear filteredRecipes if no user
         setLoading(false);
-        return;
+        //return;
       }
       setLoading(true);
       try {

@@ -140,3 +140,55 @@
 .remove-recipe:hover {
   background-color: #ef4444; /* Darker red on hover */
 }
+
+/* Style for recipe images */
+.recipe-image {
+  width: 100px; /* Set a fixed width */
+  height: 100px; /* Set a fixed height */
+  object-fit: cover; /* Ensure the image fits within the dimensions */
+  border-radius: 5px; /* Optional: Add rounded corners */
+}
+
+/* Style for search results */
+.search-results {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.search-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  cursor: grab;
+}
+
+.search-item:hover {
+  background-color: #022245a7;
+}
+
+.search-item img {
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.search-item-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.recipe-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.recipe-cuisine,
+.recipe-tags {
+  font-size: 0.9em;
+  color: #555;
+}
