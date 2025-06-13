@@ -1,13 +1,14 @@
 from fastapi import FastAPI
 from database import client, db
-from routers import users, recipes
+from routers import users, recipes, mealPlans, groceryList
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
 app.include_router(recipes.router, prefix="/recipes", tags=["recipes"])
 app.include_router(users.router, prefix="/users", tags=["users"])
-
+app.include_router(mealPlans.router, prefix="/mealPlans", tags=["mealPlans"])
+app.include_router(groceryList.router, prefix="/groceryList", tags=["groceryList"])
 
 app.add_middleware(
     CORSMiddleware,

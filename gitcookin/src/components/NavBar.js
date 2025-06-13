@@ -12,6 +12,7 @@ function NavBar({ user }) {
         <li className="navbar-item"><Link to="/contact">Contact</Link></li>
         <li className="navbar-item">{!user && <Link to="/login">Login</Link>} </li>
         <li className="navbar-item">{!user && <Link to="/register">Register</Link>} </li>
+        <li className="navbar-item">{user && <Link to="/grocery-list">Grocery List</Link>} </li>
       </ul>
     </nav>
   );

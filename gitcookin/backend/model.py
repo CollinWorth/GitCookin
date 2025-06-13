@@ -19,3 +19,17 @@ class Recipe(BaseModel):
     tags: Optional[str] = Field(default=None, title="Tags for the Recipe")
     image_url: Optional[str] = Field(default=None, title="Image URL for the Recipe")
     user_id: str
+
+class GroceryItem(BaseModel):
+    name: str
+    quantity: str
+    category: str
+    checked: bool = False
+
+class GroceryList(BaseModel):
+    user_id: str
+    name: str
+    items: List[GroceryItem] = []
+
+    class Config:
+        allow_population_by_field_name = True

@@ -1,0 +1,106 @@
+/* Overall container */
+.grocery-list-container {
+  max-width: 800px;
+  margin: auto;
+  background-color: #0f1a26; /* midnight blue */
+  color: #e0f7fa; /* light blue text */
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Heading */
+.grocery-list-container h1 {
+  font-size: 2.5rem;
+  color: #a8d5ba; /* sage green */
+  margin-bottom: 1.5rem;
+}
+
+/* Select Dropdown */
+.grocery-list-container select {
+  padding: 0.5rem 1rem;
+  background-color: #1a2a3c;
+  color: #e0f7fa;
+  border: 1px solid #a8d5ba;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+/* Add item section */
+.add-item {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.add-item input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background-color: #1a2a3c;
+  color: #e0f7fa;
+  border: 1px solid #3c5b6f;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.add-item button {
+  padding: 0.75rem 1.5rem;
+  background-color: #a8d5ba;
+  color: #0f1a26;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-item button:hover {
+  background-color: #8dbfa4; /* darker sage */
+}
+
+/* Grocery list section */
+.grocery-list h2 {
+  color: #8cc5e3; /* soft light blue */
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+}
+
+.grocery-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.grocery-item {
+  background-color: #162430;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #2f3e4d;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.grocery-item button.remove-item {
+  background-color: transparent;
+  color: #ff6b6b;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 1rem;
+  transition: color 0.2s ease;
+}
+
+.grocery-item button.remove-item:hover {
+  color: #ff4c4c;
+}
+
+/* Placeholder text */
+.grocery-list p {
+  color: #a0b3c2;
+  font-style: italic;
+}

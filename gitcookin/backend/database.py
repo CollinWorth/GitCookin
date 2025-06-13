@@ -7,6 +7,7 @@ db = client.cookindb
 recipes_collection = db.recipes
 users_collection = db.users
 mealPlans_collection = db.mealPlans
+grocery_collection = db.groceryLists
 
 
 

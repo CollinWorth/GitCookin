@@ -36,7 +36,7 @@ function CalendarPage({ user }) {
         const formattedDate = new Date(selectedDate).toISOString().split('T')[0];
 
         const response = await fetch(
-          `http://localhost:8000/recipes/mealPlans/${formattedDate}/${user.id || user._id}`
+          `http://localhost:8000/mealPlans/${formattedDate}/${user.id || user._id}`
         );
 
         if (response.ok) {
