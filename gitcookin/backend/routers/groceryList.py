@@ -58,37 +58,46 @@ async def get_grocery_list_listID(grocery_list_id: str):
 
     return convert_object_ids(grocery_list)
 
-# Add a new grocery item to the list
+# Add a new grocery item to the list (or update quantity if item exists)
 @router.put("/{grocery_list_id}")
-def add_grocery_item(grocery_list_id: str, item: GroceryItem):
-    grocery_list = grocery_collection.find_one({"_id": ObjectId(grocery_list_id)})
+async def add_grocery_item(grocery_list_id: str, item: GroceryItem):
+    grocery_list = await grocery_collection.find_one({"_id": ObjectId(grocery_list_id)})
     if not grocery_list:
         raise HTTPException(status_code=404, detail="Grocery list not found")
-    
+
+    # Check if item with the same name already exists
+    existing_items = grocery_list.get("items", [])
+    for existing_item in existing_items:
+        if existing_item.get("name") == item.name:
+            new_quantity = int(existing_item.get("quantity", 1)) + int(item.quantity)
+            result = await grocery_collection.update_one(
+                {"_id": ObjectId(grocery_list_id), "items.name": item.name},
+                {"$set": {"items.$.quantity": new_quantity}}
+            )
+            return {"message": f"Updated quantity of '{item.name}' to {new_quantity}"}
+
+    # If item doesn't exist, add it to the list
     item_dict = item.dict(by_alias=True)
-    item_dict["_id"] = ObjectId()  # Generate a new ObjectId for the item
-    grocery_collection.update_one(
+    result = await grocery_collection.update_one(
         {"_id": ObjectId(grocery_list_id)},
         {"$push": {"items": item_dict}}
     )
-    item_dict["_id"] = str(item_dict["_id"])  # Convert ObjectId to string for the response
-    return {"message": "Item added to grocery list", "item": item_dict}
+    return {"message": f"Added new item '{item.name}'", "item": item_dict}
 
-# Delete a grocery item from the list
-@router.delete("/{grocery_list_id}/{item_id}")
-def delete_grocery_item(grocery_list_id: str, item_id: str):
-    grocery_list = grocery_collection.find_one({"_id": ObjectId(grocery_list_id)})
+# Delete a grocery item by name from the list
+@router.delete("/{grocery_list_id}/{item_name}")
+async def delete_grocery_item(grocery_list_id: str, item_name: str):
+    grocery_list = await grocery_collection.find_one({"_id": ObjectId(grocery_list_id)})
     if not grocery_list:
         raise HTTPException(status_code=404, detail="Grocery list not found")
     
-    result = grocery_collection.update_one(
+    result = await grocery_collection.update_one(
         {"_id": ObjectId(grocery_list_id)},
-        {"$pull": {"items": {"_id": ObjectId(item_id)}}}
+        {"$pull": {"items": {"name": item_name}}}
     )
-    
-    if result.modified_count == 0:
-        raise HTTPException(status_code=404, detail="Item not found in grocery list")
-    
-    return {"message": "Item deleted from grocery list"}
 
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail=f"Item '{item_name}' not found in grocery list")
+
+    return {"message": f"Item '{item_name}' deleted from grocery list"}
 

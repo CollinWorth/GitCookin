@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import '../App.css';
 import './css/Recipes.css';
-import AddRecipe from '../components/addRecipe.js';
 import SearchBar from '../components/SearchBar.js';
 import { useNavigate } from 'react-router-dom';
 
 function Recipes({ user }) {
-  const [showAddRecipe, setShowAddRecipe] = useState(false);
   const [recipes, setRecipes] = useState([]);
-  const [filteredRecipes, setFilteredRecipes] = useState([]); // Initialize filteredRecipes
+  const [filteredRecipes, setFilteredRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
@@ -17,9 +15,9 @@ function Recipes({ user }) {
     const fetchRecipes = async () => {
       if (!user || !(user.id || user._id)) {
         setRecipes([]);
-        setFilteredRecipes([]); // Clear filteredRecipes if no user
+        setFilteredRecipes([]);
         setLoading(false);
-        //return;
+        return;
       }
       setLoading(true);
       try {
@@ -28,7 +26,7 @@ function Recipes({ user }) {
         if (response.ok) {
           const data = await response.json();
           setRecipes(data);
-          setFilteredRecipes(data); // Initialize filteredRecipes with all recipes
+          setFilteredRecipes(data);
         } else {
           setRecipes([]);
           setFilteredRecipes([]);
@@ -40,88 +38,101 @@ function Recipes({ user }) {
       setLoading(false);
     };
     fetchRecipes();
-  }, [showAddRecipe, user]);
+  }, [user]);
 
   const handleSearch = (query) => {
     setSearchQuery(query);
     const filtered = recipes.filter((recipe) =>
       recipe.recipe_name.toLowerCase().includes(query.toLowerCase())
     );
-    setFilteredRecipes(filtered); // Update filteredRecipes based on the search query
+    setFilteredRecipes(filtered);
   };
 
   const handleRecipeClick = (id) => {
-    navigate(`/recipes/${id}`); // Navigate to the recipe details page
+    navigate(`/recipes/${id}`);
   };
 
   return (
-    <>
-      <div className="add-recipe-button" style={{ display: 'flex', justifyContent: 'flex-end', maxWidth: 900, margin: '32px auto 0 auto' }}>
-        <button onClick={() => setShowAddRecipe(true)}>Add Recipe</button>
+    <div className="recipes-page-wrapper">
+      {/* Sticky Header */}
+      <div className="recipes-header">
+        <div className="add-recipe-button">
+          <button onClick={() => navigate('/recipes/add')}>Add Recipe</button>
+        </div>
+        <SearchBar onSearch={handleSearch} />
       </div>
-      <SearchBar onSearch={handleSearch} />
-      {showAddRecipe && (
-        <AddRecipe onClose={() => setShowAddRecipe(false)} user={user} />
-      )}
-      <div className="container">
-        <div className="recipePage-container">
-          <div className="recipes">
-            <h1>Your Recipes</h1>
-            <p>These are recipes you have added.</p>
-            <div className="recipe-list">
-              {loading ? (
-                <div>Loading recipes...</div>
-              ) : filteredRecipes.length === 0 ? ( // Use filteredRecipes for rendering
-                <div>No recipes found.</div>
-              ) : (
-                filteredRecipes.map((recipe, idx) => (
-                  <div
-                    className="recipe-card"
-                    key={recipe._id || recipe.id || idx}
-                    onClick={() => handleRecipeClick(recipe._id || recipe.id)}
-                    style={{ cursor: 'pointer' }} // Add pointer cursor for better UX
-                  >
-                    <h2>{recipe.recipe_name}</h2>
-                    <div style={{ margin: "10px 0" }}>
-                      {recipe.cuisine && (
-                        <span className="recipe-badge">{recipe.cuisine}</span>
-                      )}
-                      {recipe.tags && (
-                        <span className="recipe-badge" style={{ marginLeft: 8 }}>{recipe.tags}</span>
-                      )}
-                    </div>
-                    <div className="recipe-details-row">
-                      {recipe.prep_time && (
-                        <span>
-                          <strong>Prep:</strong> {recipe.prep_time} min
-                        </span>
-                      )}
-                      {recipe.cook_time && (
-                        <span>
-                          <strong>Cook:</strong> {recipe.cook_time} min
-                        </span>
-                      )}
-                      {recipe.servings && (
-                        <span>
-                          <strong>Servings:</strong> {recipe.servings}
-                        </span>
-                      )}
-                    </div>
-                    {recipe.image_url && (
-                      <img
-                        src={recipe.image_url}
-                        alt={recipe.recipe_name}
-                        className="recipe-card-image"
-                      />
+
+      {/* Main Grid Layout */}
+      <div className="recipes-layout">
+        {/* Left Sidebar */}
+        <aside className="recipes-sidebar-left">
+          <h3>Quick Filters</h3>
+          <ul>
+            <li>🌱 Vegetarian</li>
+            <li>🔥 Quick Meals</li>
+            <li>🍲 Soups</li>
+            <li>🌍 World Cuisine</li>
+          </ul>
+        </aside>
+
+        {/* Main Recipe Area */}
+        <main className="recipes">
+          <h1>Your Recipes</h1>
+          <p>These are recipes you have added.</p>
+          <div className="recipe-list">
+            {loading ? (
+              <div>Loading recipes...</div>
+            ) : filteredRecipes.length === 0 ? (
+              <div>No recipes found.</div>
+            ) : (
+              filteredRecipes.map((recipe, idx) => (
+                <div
+                  className="recipe-card"
+                  key={recipe._id || recipe.id || idx}
+                  onClick={() => handleRecipeClick(recipe._id || recipe.id)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <h2>{recipe.recipe_name}</h2>
+                  <div style={{ margin: "10px 0" }}>
+                    {recipe.cuisine && (
+                      <span className="recipe-badge">{recipe.cuisine}</span>
+                    )}
+                    {recipe.tags && (
+                      <span className="recipe-badge" style={{ marginLeft: 8 }}>{recipe.tags}</span>
                     )}
                   </div>
-                ))
-              )}
-            </div>
+                  <div className="recipe-details-row">
+                    {recipe.prep_time && (
+                      <span><strong>Prep:</strong> {recipe.prep_time} min</span>
+                    )}
+                    {recipe.cook_time && (
+                      <span><strong>Cook:</strong> {recipe.cook_time} min</span>
+                    )}
+                    {recipe.servings && (
+                      <span><strong>Servings:</strong> {recipe.servings}</span>
+                    )}
+                  </div>
+                  {recipe.image_url && (
+                    <img
+                      src={recipe.image_url}
+                      alt={recipe.recipe_name}
+                      className="recipe-card-image"
+                    />
+                  )}
+                </div>
+              ))
+            )}
           </div>
-        </div>
+        </main>
+
+        {/* Right Sidebar */}
+        <aside className="recipes-sidebar-right">
+          <h3>Tips & Ideas</h3>
+          <p>💡 Try organizing recipes by season or occasion.</p>
+          <p>📷 Click any recipe to see or edit details.</p>
+        </aside>
       </div>
-    </>
+    </div>
   );
 }
 

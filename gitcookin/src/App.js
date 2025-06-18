@@ -10,6 +10,7 @@ import Contact from './pages/Contact';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import GroceryList from './pages/GroceryList';
+import AddRecipe from './pages/AddRecipe';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -27,6 +28,7 @@ function App() {
           <Route path="/login" element={<Login onLogin={setUser} />} />
           <Route path="/register" element={<Register />} />
           <Route path="/grocery-list" element={<GroceryList user={user} />} />
+          <Route path="/recipes/add" element={<AddRecipe user={user}/>} />
         </Routes>
       </div>
     </Router>

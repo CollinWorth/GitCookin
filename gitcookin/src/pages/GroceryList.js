@@ -2,146 +2,146 @@ import React, { useState, useEffect } from 'react';
 import './css/GroceryList.css';
 
 function GroceryList({ user }) {
-  const [groceryLists, setGroceryLists] = useState([]); // Holds all grocery lists for user
-  const [newItem, setNewItem] = useState(''); // Input for new item
-  const [selectedListId, setSelectedListId] = useState(null); // Which list to add items to
+  const [groceryLists, setGroceryLists] = useState([]);
+  const [newItem, setNewItem] = useState('');
+  const [newItemQuantity, setNewItemQuantity] = useState('');
+  const [selectedListId, setSelectedListId] = useState(null);
 
-  // Fetch all grocery lists for this user
   useEffect(() => {
-    const fetchGroceryLists = async () => {
-      try {
-        const response = await fetch(`http://localhost:8000/groceryList/userID/${user.id || user._id}`);
-        if (response.ok) {
-          const data = await response.json(); // Parse JSON
-          setGroceryLists(data); // Set all grocery lists
-          if (data.length > 0) {
-            setSelectedListId(data[0]._id); // Default to first list
-          }
-        } else {
-          console.error('Failed to fetch grocery lists:', response.statusText);
-        }
-      } catch (err) {
-        console.error('Error fetching grocery lists:', err);
-      }
-    };
-
-    if (user) {
-      fetchGroceryLists();
-    }
+    if (user) fetchGroceryLists();
   }, [user]);
 
-  // Add a new item to the selected list
-  const addItem = async () => {
-    if (!newItem.trim() || !selectedListId) return;
-
+  const fetchGroceryLists = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/groceryList/${selectedListId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name: newItem.trim(), quantity: 1, category: 'Other', checked: false }),
-      });
-
-      if (response.ok) {
-        // Update the UI optimistically
-        const updatedLists = groceryLists.map((list) => {
-          if (list._id === selectedListId) {
-            return {
-              ...list,
-              items: [...list.items, { name: newItem.trim(), quantity: 1, category: 'Other', checked: false }],
-            };
-          }
-          return list;
-        });
-        setGroceryLists(updatedLists);
-        setNewItem('');
+      const res = await fetch(`http://localhost:8000/groceryList/userID/${user.id || user._id}`);
+      if (res.ok) {
+        const data = await res.json();
+        setGroceryLists(data);
+        if (data.length > 0) setSelectedListId(data[0]._id);
       } else {
-        console.error('Failed to add item:', response.statusText);
+        console.error('Failed to fetch lists:', res.statusText);
       }
     } catch (err) {
-      console.error('Error adding item:', err);
+      console.error('Fetch error:', err);
     }
   };
 
-  // Remove item from list
-  const removeItem = async (itemId) => {
+  const addItem = async () => {
+    if (!newItem.trim() || !newItemQuantity.trim() || !selectedListId) return;
     try {
-      const response = await fetch(`http://localhost:8000/groceryList/${selectedListId}/${itemId}`, {
-        method: 'DELETE',
+      const res = await fetch(`http://localhost:8000/groceryList/${selectedListId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: newItem.trim(),
+          quantity: newItemQuantity.trim(),
+          category: 'Other',
+          checked: false
+        })
       });
-
-      if (response.ok) {
-        const updatedLists = groceryLists.map((list) => {
-          if (list._id === selectedListId) {
-            return {
-              ...list,
-              items: list.items.filter((item) => item._id !== itemId),
-            };
-          }
-          return list;
-        });
-        setGroceryLists(updatedLists);
+      if (res.ok) {
+        fetchGroceryLists();
+        setNewItem('');
+        setNewItemQuantity('');
       } else {
-        console.error('Failed to remove item:', response.statusText);
+        console.error('Failed to add item:', res.statusText);
       }
     } catch (err) {
-      console.error('Error removing item:', err);
+      console.error('Add error:', err);
+    }
+  };
+
+  const removeItem = async (itemName) => {
+    try {
+      const res = await fetch(`http://localhost:8000/groceryList/${selectedListId}/${itemName}`, {
+        method: 'DELETE'
+      });
+      if (res.ok) {
+        fetchGroceryLists();
+      } else {
+        console.error('Failed to remove item:', res.statusText);
+      }
+    } catch (err) {
+      console.error('Remove error:', err);
     }
   };
 
   return (
-    <div className="grocery-list-container">
-      <h1>Your Grocery Lists</h1>
-
-      {/* Dropdown to switch between lists */}
-      {groceryLists.length > 0 && (
-        <select onChange={(e) => setSelectedListId(e.target.value)} value={selectedListId}>
-          {groceryLists.map((list) => (
-            <option key={list._id} value={list._id}>
-              {list.name}
-            </option>
-          ))}
-        </select>
-      )}
-
-      {/* Add item input */}
-      <div className="add-item">
-        <input
-          type="text"
-          value={newItem}
-          onChange={(e) => setNewItem(e.target.value)}
-          placeholder="Add a new item"
-        />
-        <button onClick={addItem} disabled={!selectedListId}>
-          Add
-        </button>
+    <div className="grocery-page-wrapper">
+      {/* Sticky Header */}
+      <div className="grocery-header">
       </div>
 
-      {/* Display items of selected list */}
-      <div className="grocery-list">
-        {selectedListId &&
-          groceryLists
-            .filter((list) => list._id === selectedListId)
-            .map((list) => (
-              <div key={list._id}>
-                <h2>{list.name}</h2>
-                {list.items.length > 0 ? (
-                  <ul>
-                    {list.items.map((item, idx) => (
-                      <li key={item._id || idx} className="grocery-item">
-                        {item.name} ({item.quantity})
-                        <button className="remove-item" onClick={() => removeItem(item._id)}>
-                          X
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p>No items in this list yet.</p>
-                )}
-              </div>
+      {/* Main Grid Layout */}
+      <div className="grocery-layout">
+        {/* Left Sidebar */}
+        <aside className="grocery-sidebar-left">
+          <h3>Your Lists</h3>
+          <ul>
+            {groceryLists.map((list) => (
+              <li
+                key={list._id}
+                onClick={() => setSelectedListId(list._id)}
+                style={{
+                  fontWeight: selectedListId === list._id ? 'bold' : 'normal',
+                  cursor: 'pointer',
+                }}
+              >
+                {list.name}
+              </li>
             ))}
+          </ul>
+        </aside>
+
+        {/* Main Section */}
+        <main className="grocery">
+          <h1>{groceryLists.find((list) => list._id === selectedListId)?.name || 'Select a List'}</h1>
+          <p>Add items to your grocery list:</p>
+
+          <div className="add-item">
+            <input
+              type="text"
+              placeholder="Item name"
+              value={newItem}
+              onChange={(e) => setNewItem(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Quantity"
+              value={newItemQuantity}
+              onChange={(e) => setNewItemQuantity(e.target.value)}
+            />
+            <button onClick={addItem}>Add</button>
+          </div>
+
+          <div className="grocery-list">
+            {selectedListId &&
+              groceryLists
+                .filter((list) => list._id === selectedListId)
+                .map((list) => (
+                  <div key={list._id} className="grocery-card">
+                    {list.items.length > 0 ? (
+                      list.items.map((item, idx) => (
+                        <div key={idx} className="grocery-details-row">
+                          <span>
+                            {item.name} ({item.quantity})
+                          </span>
+                          <button
+                            className="remove-item"
+                            onClick={() => removeItem(item.name)}
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      ))
+                    ) : (
+                      <p>No items yet.</p>
+                    )}
+                  </div>
+                ))}
+          </div>
+        </main>
+
       </div>
     </div>
   );

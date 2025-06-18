@@ -1,24 +1,68 @@
-.navbar{
-    background-color: #333;
+.header {
+  background-color: #9f4904; /* Burnt orange */
+  padding-top: 1.3rem;
+  padding-bottom: 0.5rem;
 }
 
-.navbar-list{
-    list-style: none;
-    display: flex;
-    margin: 0;
-    padding: 0;
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.logo {
+  font-size: 1.8rem;
+  color: #f1e8e2; /* Light cream */
+  font-family: 'Georgia', serif;
+  font-weight: bold;
+}
+
+/* Navbar section */
+.navbar {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.8rem;
+}
+
+.navbar-list {
+  list-style: none;
+  display: flex;
+  gap: 2.5rem;
+  margin: 0;
+  padding: 0;
 }
 
 .navbar-item a {
-    color: white;
-    text-decoration: none;
-    font-size: 1.2rem;
-    float: left;
-    padding: 1.5rem;
-    margin-left: 1rem;
+  color: #f1e8e2;
+  font-size: 1.3rem;
+  font-family: 'Georgia', serif;
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.2s ease;
+  position: relative;
+}
+
+.navbar-item a::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #e1c277; /* Warm beige */
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
 }
 
 .navbar-item a:hover {
-    background-color: #716d6db1;
+  color: #e1c277;
+  transform: translateY(-1px);
 }
 
+.navbar-item a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
